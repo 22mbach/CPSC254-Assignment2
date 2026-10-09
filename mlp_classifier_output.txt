@@ -1,0 +1,57 @@
+Iris dataset: 150 samples, 4 features, 3 classes (setosa, versicolor, virginica)
+
+Training set: 120 samples, testing set: 30 samples
+
+======================================================================
+(3) Baseline MLP: 1 hidden layer x 3 neurons
+======================================================================
+Hyperparameters: activation=logistic, solver=sgd, learning_rate_init=0.001,
+                 momentum=0.9, batch_size=32, max_iter=200
+Baseline results:
+  Training accuracy:  66.67%   (training error 33.33%)
+  Testing accuracy:   66.67%   (testing error  33.33%)
+
+======================================================================
+(4) Hyperparameter tuning (architecture fixed at 1 x 3 neurons)
+======================================================================
+Best hyperparameters (5-fold CV accuracy 97.50%):
+  activation = logistic
+  alpha = 0.0001
+  learning_rate_init = 0.01
+  max_iter = 500
+  solver = sgd
+Tuned results:
+  Training accuracy:  97.50%   (training error  2.50%)
+  Testing accuracy:  100.00%   (testing error   0.00%)
+Change vs. baseline: training +30.83 pts, testing +33.33 pts
+Explanation: Yes, tuning improved classification performance. The baseline's
+small learning rate with logistic units and only 200 SGD epochs left the
+network under-trained (stuck predicting too few classes). The tuned
+settings above, chiefly a larger learning rate and iteration budget, let
+the same 3-neuron network converge to a much better decision boundary.
+
+======================================================================
+(5) Increasing network complexity (tuned hyperparameters kept)
+======================================================================
+Hidden layers      Train %    Test %
+(3,)                 97.50    100.00
+(5,)                 97.50    100.00
+(10,)                97.50    100.00
+(10, 10)             97.50    100.00
+(20, 10)             98.33    100.00
+(20, 20, 10)         33.33     33.33
+(50, 50)             98.33    100.00
+
+Chosen architecture: (20, 10)
+Results:
+  Training accuracy:  98.33%   (training error  1.67%)
+  Testing accuracy:  100.00%   (testing error   0.00%)
+Change vs. tuned 1 x 3 network: training +0.83 pts, testing +0.00 pts
+Explanation: Yes. The larger network fits the training data better while
+keeping test accuracy at least as high, so it is the better model. Three
+hidden neurons are a tight bottleneck for separating versicolor from
+virginica, whose measurements overlap; more hidden units give the network
+capacity to model that boundary. Gains are small because Iris is easy and
+the tuned 1 x 3 network was already near the ceiling. More is not always
+better: a deeper network can fail to train at all with the same plain-SGD
+settings (see any row stuck at 33.33%, i.e. predicting a single class).
