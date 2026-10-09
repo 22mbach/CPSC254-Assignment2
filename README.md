@@ -21,7 +21,7 @@ Snake agent), plus a written report.
 Python 3.9+ is recommended. Install the dependencies used by Parts 1 to 4.1:
 
 ```bash
-pip install numpy pandas matplotlib scikit-learn
+pip install numpy matplotlib scikit-learn
 ```
 
 Part 4.2 additionally needs PyTorch and pygame (see below).

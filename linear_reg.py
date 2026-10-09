@@ -18,7 +18,6 @@ Run:  python linear_reg.py
 """
 
 import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import PolynomialFeatures
@@ -121,12 +120,14 @@ def main():
     # (6) GasProperties.csv: least squares with the normal equation
     # ---------------------------------------------------------------
     print(f"\n=== (6) Least squares on {GAS_CSV} ===")
-    data = pd.read_csv(GAS_CSV)
-    print(f"Loaded {len(data)} rows, columns: {', '.join(data.columns)}")
+    with open(GAS_CSV) as f:
+        columns = f.readline().strip().split(",")
+    data = np.loadtxt(GAS_CSV, delimiter=",", skiprows=1)
+    print(f"Loaded {len(data)} rows, columns: {', '.join(columns)}")
     print(f"Features: {', '.join(GAS_FEATURES)}  ->  target: {GAS_TARGET}")
 
-    X = data[GAS_FEATURES].to_numpy()
-    y_gas = data[GAS_TARGET].to_numpy()
+    X = data[:, [columns.index(c) for c in GAS_FEATURES]]
+    y_gas = data[:, columns.index(GAS_TARGET)]
     X_train, X_test, y_train, y_test = train_test_split(
         X, y_gas, test_size=0.2, random_state=RANDOM_STATE)
     print(f"Training set: {len(X_train)} rows, testing set: {len(X_test)} rows")
