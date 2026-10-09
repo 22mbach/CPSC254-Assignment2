@@ -1,0 +1,38 @@
+=== (1) Training dataset ===
+X = [-3.0, -2.5, -2.0, -1.5, -1.0, 0.0, 1.0, 1.5, 2.0, 2.5, 2.7]
+Y = [15.5, 12.9, 9.5, 6.2, 5.8, 5.5, 7.1, 9.7, 13.5, 18.4, 21.4]
+N = 11
+
+=== (3)-(5) LinearRegression, straight line ===
+Coefficient vector [w0, w1] = [11.4362, 0.9936]
+Equation: y = 11.4362 + 0.9936 x
+Training RMSE = 4.7477
+
+=== (3)-(5) LinearRegression, polynomial of degree 2 ===
+Coefficient vector [w0, w1, w2] = [4.7878, 1.2333, 1.691]
+Equation: y = 4.7878 + 1.2333 x + 1.6910 x^2
+Training RMSE = 0.6348
+
+The data is U-shaped, so the degree-2 polynomial fits best (training RMSE 0.6348 vs. 4.7477 for a straight line).
+Final model: y = 4.7878 + 1.2333 x + 1.6910 x^2
+
+Plot saved to linear_reg.png
+
+=== (6) Least squares on GasProperties.csv ===
+Loaded 420000 rows, columns: T, P, TC, SV, Idx
+Features: T, P, TC, SV  ->  target: Idx
+Training set: 336000 rows, testing set: 84000 rows
+
+Coefficient vector w = (X^T X)^-1 X^T y:
+  w0 (bias)  =  6.794491e+01
+  w1 (T)     =  3.720714e-02
+  w2 (P)     = -4.219892e-03
+  w3 (TC)    = -5.990956e+00
+  w4 (SV)    = -5.908089e-02
+Equation: Idx = 67.944911 + 0.037207 T - 0.004220 P - 5.990956 TC - 0.059081 SV
+
+Training RMSE = 0.136523
+Testing RMSE  = 0.135499
+(Standard deviation of Idx = 0.251821; R^2 on test = 0.7086)
+Train and test RMSE are almost equal, so the linear model is not overfitting;
+the remaining error comes from the relationship not being fully linear.

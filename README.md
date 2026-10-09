@@ -9,7 +9,7 @@ Snake agent), plus a written report.
 
 | Part | Topic | File | Points | Status |
 |------|-------|------|--------|--------|
-| 1 | Linear regression | `linear_reg.py` | 20 | Not started (dataset `GasProperties.csv` is in the repo) |
+| 1 | Linear regression | `linear_reg.py` | 20 | Done |
 | 2 | MLP classification | `mlp_classifier.py` | 30 | Done (sample run in `mlp_classifier_output.txt`) |
 | 3 | K-means clustering | `kmeans_clustering.py` | 30 | Done |
 | 4.1 | Gridworld policy iteration | `gridworld_policy_iteration.py` | 20 | Starter file only; the three TODO functions are still empty |
@@ -45,7 +45,18 @@ Requirements from the brief:
 `GasProperties.csv` (about 20 MB, 420,000 rows) has five numeric columns:
 `T`, `P`, `TC`, `SV`, `Idx`.
 
-Run (once written): `python linear_reg.py`
+The script fits both a straight line and a degree-2 polynomial
+(`PolynomialFeatures` + `LinearRegression`); the data is U-shaped, so the
+quadratic wins (training RMSE 0.63 vs. 4.75). For `GasProperties.csv` it uses
+`T`, `P`, `TC`, `SV` as features and `Idx` as the target, giving a train RMSE
+of 0.1365 and test RMSE of 0.1355.
+
+```bash
+python linear_reg.py
+```
+
+Saves the scatter plot with both fits to `linear_reg.png` and opens it in a
+window.
 
 ## Part 2: MLP classification (`mlp_classifier.py`)
 
