@@ -13,7 +13,7 @@ Snake agent), plus a written report.
 | 2 | MLP classification | `mlp_classifier.py` | 30 | Done (sample run in `mlp_classifier_output.txt`) |
 | 3 | K-means clustering | `kmeans_clustering.py` | 30 | Done |
 | 4.1 | Gridworld policy iteration | `gridworld_policy_iteration.py` | 20 | Starter file only; the three TODO functions are still empty |
-| 4.2 | Snake DQN | external repo | 30 | Not started (screenshots and answers go in the report) |
+| 4.2 | Snake DQN | `snake_dqn/agent.py` (modified copy, see `snake_dqn/README.md`) | 30 | Not started (screenshots and answers go in the report) |
 | — | Report | Word or PDF | — | Not started |
 
 ## Setup
