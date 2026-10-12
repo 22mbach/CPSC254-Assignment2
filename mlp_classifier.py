@@ -33,12 +33,14 @@ def evaluate(model, X_train, X_test, y_train, y_test):
 
 
 def report(title, train_acc, test_acc):
+    """Print the training and testing accuracy and error under a title."""
     print(f"{title}")
     print(f"  Training accuracy: {train_acc:6.2f}%   (training error {100 - train_acc:5.2f}%)")
     print(f"  Testing accuracy:  {test_acc:6.2f}%   (testing error  {100 - test_acc:5.2f}%)")
 
 
 def main():
+    """Run the baseline, tuned and larger MLPs on Iris and print their accuracies."""
     # (1) Load the Iris dataset directly from sklearn.datasets.
     iris = load_iris()
     X, y = iris.data, iris.target
@@ -129,6 +131,7 @@ def main():
     # higher test accuracy, or equal test accuracy with higher training accuracy.
     # If none beats it, report the best one found.
     def score(arch):
+        """Sort key for an architecture: (test accuracy, train accuracy)."""
         return results[arch][1], results[arch][0]
 
     improved = [a for a in architectures[1:] if score(a) > (tuned_test, tuned_train)]

@@ -68,6 +68,7 @@ def add_bias(X):
 
 
 def main():
+    """Fit the brief's dataset with linear/polynomial regression, plot it, then run least squares on GasProperties.csv."""
     # ---------------------------------------------------------------
     # (1) Training dataset from the brief
     # ---------------------------------------------------------------

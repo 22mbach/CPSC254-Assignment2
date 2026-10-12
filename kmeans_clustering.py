@@ -47,6 +47,7 @@ def map_clusters_to_classes(clusters, y):
 
 
 def main():
+    """Cluster Iris with K-means, validate the clusters against the true classes and an MLP, and plot the result."""
     # ---------------------------------------------------------------
     # Load the Iris dataset; only the features are used for clustering.
     # ---------------------------------------------------------------

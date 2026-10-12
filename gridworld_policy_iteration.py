@@ -22,6 +22,7 @@ A2DELTA = {
 
 @dataclass
 class Gridworld:
+    """Grid MDP with terminal cells, obstacles, reward flags and a per-step reward."""
     H: int = 5
     W: int = 5
     terminals: tuple = ((0, 4), (4, 4), (1,3))
@@ -32,15 +33,20 @@ class Gridworld:
     flag_reward: float = 5.0
 
     def in_bounds(self, r, c):
+        """Return True if cell (r, c) lies inside the grid."""
         return 0 <= r < self.H and 0 <= c < self.W
     def is_terminal(self, s):
+        """Return True if state s is a terminal cell."""
         return s in self.terminals
     def is_obstacle(self, s):
+        """Return True if state s is an obstacle cell."""
         return s in self.obstacles
     def is_flag(self, s):
+        """Return True if state s is a reward-flag cell."""
         return s in self.reward_flags
 
     def next_state(self, s, a):
+        """Return the state reached by taking action a from s (stays put at walls, obstacles and terminals)."""
         if self.is_terminal(s):
             return s # stay if already terminal
         dr, dc = A2DELTA[a]
@@ -50,6 +56,7 @@ class Gridworld:
         return (nr, nc)
 
     def reward(self, s, a, s_next):
+        """Return the reward for moving from s to s_next: +10 for entering a terminal, the flag bonus for a flag, else the step reward."""
         # entering a terminal gives +10
         if self.is_terminal(s_next) and not self.is_terminal(s):
             # special case: if it's also a flag, give bonus + terminal reward
@@ -62,6 +69,7 @@ class Gridworld:
         return self.step_reward
 
 def transition_dist(env, s, a, noise):
+    """Return [(s_next, prob)] for action a from s, slipping to each perpendicular action with probability noise/2."""
     if env.is_terminal(s):
         return [(s, 1.0)]
     perp = {A_UP: [A_LEFT, A_RIGHT], A_DOWN: [A_LEFT, A_RIGHT], A_LEFT: [A_UP, A_DOWN], A_RIGHT: [A_UP, A_DOWN]}[a]
@@ -127,6 +135,7 @@ def debug_policy_along_path(env, pi, start, max_steps=50):
     print("DEBUG PATH END. Final s:", s, "is_terminal?", env.is_terminal(s))
 
 def random_policy(env):
+    """Return a uniform random policy of shape (H, W, 4); terminal and obstacle cells get all zeros."""
     pi = np.zeros((env.H, env.W, 4))
     for r in range(env.H):
         for c in range(env.W):
@@ -136,6 +145,7 @@ def random_policy(env):
     return pi
 
 def policy_evaluation(env, V, pi, gamma, noise):
+    """Run one sweep of policy evaluation and return the updated value grid V for policy pi."""
     V_new = V.copy()
     """
     TODO: Implement one swep policy evaluation to compute V(s) given policy pi:
@@ -144,6 +154,7 @@ def policy_evaluation(env, V, pi, gamma, noise):
     return V_new
 
 def policy_improvement(env, V, gamma, noise):
+    """Return (pi_new, stable): the greedy policy w.r.t. V and whether the policy stopped changing."""
     pi_new = np.zeros((env.H, env.W, 4))
     """
     TODO: Implement policy improvement: update pi greedily based on current V(s).
@@ -151,6 +162,7 @@ def policy_improvement(env, V, gamma, noise):
     return pi_new, True
 
 def policy_iteration(env, gamma, noise, max_eval_iters=100, tol=1e-6):
+    """Alternate policy evaluation and improvement until the policy is stable; return (V, pi)."""
     V = np.zeros((env.H, env.W))
     pi = random_policy(env)
     stable = False
@@ -160,6 +172,7 @@ def policy_iteration(env, gamma, noise, max_eval_iters=100, tol=1e-6):
     return V, pi
 
 def extract_path(env, pi, start, max_steps=50):
+    """Follow the policy's best action from start; return the visited cells until a terminal, a stuck step, or max_steps."""
     path = [start]
     s = start
     for _ in range(max_steps):
@@ -179,7 +192,9 @@ def extract_path(env, pi, start, max_steps=50):
     return path
 
 class Viewer:
+    """Interactive matplotlib window for stepping through policy iteration and showing the resulting path."""
     def __init__(self):
+        """Create the environment, initial values/policy, and the figure with its buttons and sliders."""
         self.env = Gridworld()
         self.start = (4, 0)
         self.gamma = 0.95
@@ -211,22 +226,27 @@ class Viewer:
         self.s_noise.on_changed(self.on_hyper)
         self.redraw()
     def on_hyper(self, _):
+        """Slider callback: read the new gamma and noise values and redraw."""
         self.gamma = self.s_gamma.val
         self.noise = self.s_noise.val
         self.redraw()
     def on_iter(self, _):
+        """Button callback: run 15 evaluation sweeps and one improvement step, then redraw."""
         for _ in range(15):
             self.V = policy_evaluation(self.env, self.V, self.pi, self.gamma, self.noise)
         self.pi, _ = policy_improvement(self.env, self.V, self.gamma, self.noise)
         self.redraw()
     def on_run(self, _):
+        """Button callback: run policy iteration to convergence, print a debug trace from the start cell, and redraw."""
         self.V, self.pi = policy_iteration(self.env, self.gamma, self.noise)
         debug_policy_along_path(self.env, self.pi, self.start)
         self.redraw()
     def on_path(self, _):
+        """Button callback: compute the greedy path from the start cell and redraw."""
         self.path = extract_path(self.env, self.pi, start=self.start)
         self.redraw()
     def redraw(self):
+        """Redraw the value heatmap, terminals, obstacles, flags, start cell and path."""
         self.ax.clear()
         self.ax.set_title("Gridworld with Path")
         # Draw grid lines
@@ -257,6 +277,7 @@ class Viewer:
         self.fig.canvas.draw_idle()
 
 def main():
+    """Open the Gridworld viewer window."""
     Viewer()
     plt.show()
 
