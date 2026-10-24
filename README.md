@@ -12,7 +12,7 @@ Snake agent), plus a written report.
 | 1 | Linear regression | `linear_reg.py` | 20 | Done |
 | 2 | MLP classification | `mlp_classifier.py` | 30 | Done (sample run in `mlp_classifier_output.txt`) |
 | 3 | K-means clustering | `kmeans_clustering.py` | 30 | Done |
-| 4.1 | Gridworld policy iteration | `gridworld_policy_iteration.py` | 20 | Starter file only; the three TODO functions are still empty |
+| 4.1 | Gridworld policy iteration | `gridworld_policy_iteration.py` | 20 | Done (sample run in `gridworld_output.txt`, screenshot `gridworld_converged.png`) |
 | 4.2 | Snake DQN | `snake_dqn/agent.py` (modified copy, see `snake_dqn/README.md`) | 30 | Not started (screenshots and answers go in the report) |
 | — | Report | Word or PDF | — | Not started |
 
@@ -102,11 +102,21 @@ terminal states, an obstacle and a reward flag, plus an interactive matplotlib
 viewer (buttons and sliders for gamma and noise) that shows the value
 function as a heatmap.
 
-Still to implement:
+Implemented:
 
-- `policy_evaluation`: one sweep computing V(s) under policy π.
-- `policy_improvement`: greedy update of π from V(s), returning `(pi, stable)`.
-- `policy_iteration`: alternate evaluation and improvement until π is stable.
+- `policy_evaluation`: one Bellman expectation sweep,
+  V(s) = Σₐ π(a|s) Σₛ' P(s'|s,a) [R(s,a,s') + γ V(s')], skipping terminals
+  and obstacles.
+- `policy_improvement`: computes Q(s,a) from V and picks the greedy action
+  (ties broken consistently), returning `(pi, stable)`; `stable` is True when
+  the new policy matches the previous one (optional `pi_old` argument).
+- `policy_iteration`: repeats evaluation sweeps until V changes by less than
+  `tol`, then improves, until the policy is stable.
+
+With the defaults (γ = 0.95, noise = 0) it converges in 3 iterations. The
+path from the start (4,0) goes up the left column and across row 1 to the
+flag terminal (1,3), worth +15 (terminal +10 plus flag +5). With noise = 0.2
+the start cell instead heads along the bottom row to (4,4).
 
 ```bash
 python gridworld_policy_iteration.py
