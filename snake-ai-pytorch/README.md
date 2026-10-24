@@ -8,3 +8,13 @@ You can find all tutorials on my channel: [Playlist](https://www.youtube.com/pla
 - Part 2: Learn how to setup the environment and implement the Snake game.
 - Part 3: Implement the agent that controls the game.
 - Part 4: Implement the neural network to predict the moves and train it.
+
+## Running it for this assignment
+
+```powershell
+pip install torch pygame matplotlib ipython
+cd snake-ai-pytorch
+python agent.py
+```
+
+Run from this folder so `game.py` can load `arial.ttf`. `python snake_game_human.py` lets you play the game yourself with the arrow keys. The screenshots in this folder (`Snake-game-running.png`, `training-plot.png`, `Snake-game-terminal.png`) are the ones used in the report.

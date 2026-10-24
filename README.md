@@ -9,22 +9,24 @@ Snake agent), plus a written report.
 
 | Part | Topic | File | Points | Status |
 |------|-------|------|--------|--------|
-| 1 | Linear regression | `linear_reg.py` | 20 | Done |
-| 2 | MLP classification | `mlp_classifier.py` | 30 | Done (sample run in `mlp_classifier_output.txt`) |
-| 3 | K-means clustering | `kmeans_clustering.py` | 30 | Done |
-| 4.1 | Gridworld policy iteration | `gridworld_policy_iteration.py` | 20 | Done (sample run in `gridworld_output.txt`, screenshot `gridworld_converged.png`) |
-| 4.2 | Snake DQN | `snake_dqn/agent.py` (modified copy, see `snake_dqn/README.md`) | 30 | Not started (screenshots and answers go in the report) |
-| — | Report | Word or PDF | — | Not started |
+| 1 | Linear regression | `linear_reg.py` | 20 | Done (output in `linear_reg_output.txt`, plot `linear_reg.png`) |
+| 2 | MLP classification | `mlp_classifier.py` | 30 | Done (output in `mlp_classifier_output.txt`) |
+| 3 | K-means clustering | `kmeans_clustering.py` | 30 | Done (plot `kmeans_clusters.png`) |
+| 4.1 | Gridworld policy iteration | `gridworld_policy_iteration.py` | 20 | Done (output in `gridworld_output.txt`, screenshot `gridworld_converged.png`) |
+| 4.2 | Snake DQN | `snake-ai-pytorch/` | 30 | Done (screenshots in `snake-ai-pytorch/`) |
+| — | Report | `CPSC254_Assignment2_Report.pdf` | — | Done |
 
 ## Setup
 
 Python 3.9+ is recommended. Install the dependencies used by Parts 1 to 4.1:
 
-```bash
+```powershell
 pip install numpy pandas matplotlib scikit-learn
 ```
 
-Part 4.2 additionally needs PyTorch and pygame (see below).
+Part 4.2 additionally needs PyTorch, pygame and IPython (see below). Run every
+command from the repository root unless noted; on Windows, use `py` in place
+of `python` if `python` is not on your PATH.
 
 ## Part 1: Linear regression (`linear_reg.py`)
 
@@ -51,7 +53,7 @@ quadratic wins (training RMSE 0.63 vs. 4.75). For `GasProperties.csv` it uses
 `T`, `P`, `TC`, `SV` as features and `Idx` as the target, giving a train RMSE
 of 0.1365 and test RMSE of 0.1355.
 
-```bash
+```powershell
 python linear_reg.py
 ```
 
@@ -73,7 +75,7 @@ Trains scikit-learn `MLPClassifier` models on the Iris dataset with an
 
 Each step prints a short explanation of whether performance improved.
 
-```bash
+```powershell
 python mlp_classifier.py
 ```
 
@@ -88,7 +90,7 @@ The output of a full run is saved in `mlp_classifier_output.txt`.
    homogeneity and completeness, and compares against an MLP classifier on the
    same 20% test split.
 
-```bash
+```powershell
 python kmeans_clustering.py
 ```
 
@@ -118,31 +120,44 @@ path from the start (4,0) goes up the left column and across row 1 to the
 flag terminal (1,3), worth +15 (terminal +10 plus flag +5). With noise = 0.2
 the start cell instead heads along the bottom row to (4,4).
 
-```bash
+```powershell
 python gridworld_policy_iteration.py
 ```
 
-## Part 4.2: Snake agent with a DQN
+## Part 4.2: Snake agent with a DQN (`snake-ai-pytorch/`)
 
-Uses Patrick Loeber's
-[snake-ai-pytorch](https://github.com/patrickloeber/snake-ai-pytorch). Per
-the brief, that code is not committed here; only screenshots and answers go
-in the report.
+A copy of Patrick Loeber's
+[snake-ai-pytorch](https://github.com/patrickloeber/snake-ai-pytorch)
+(MIT license, see `snake-ai-pytorch/LICENSE`):
 
-```bash
-git clone https://github.com/patrickloeber/snake-ai-pytorch
-cd snake-ai-pytorch
+- `game.py`: the Snake environment (`SnakeGameAI`), built with pygame.
+- `model.py`: the `Linear_QNet` network (11 inputs, 256 hidden, 3 outputs)
+  and the `QTrainer` that applies the Bellman update.
+- `agent.py`: the DQN agent and training loop.
+- `helper.py`: live plot of score and mean score.
+- `snake_game_human.py`: a version you can play yourself with the arrow keys.
+
+```powershell
 pip install torch pygame matplotlib ipython
+cd snake-ai-pytorch
 python agent.py
 ```
 
-The report needs screenshots of the game, the training plot (score and mean
-score) and the terminal output, plus answers on the state representation,
-action space, reward function and what each DQN output represents.
+Run it from inside `snake-ai-pytorch/` so `game.py` can find `arial.ttf`.
+Training keeps going until you close the window or press Ctrl+C, and the best
+model is saved to `snake-ai-pytorch/model/model.pth`.
+
+Screenshots used in the report: `Snake-game-running.png` (the game),
+`training-plot.png` (score and mean score) and `Snake-game-terminal.png`
+(terminal output).
+
+## Report
+
+`CPSC254_Assignment2_Report.pdf` has the answers and screenshots for every
+part.
 
 ## Submission
 
 Submit one report (Word or PDF) listing team members and each member's
 percentage contribution (or "equal contribution"), with answers and
-screenshots for each part, along with the program files above. Do not upload
-downloaded packages.
+screenshots for each part, along with the program files above.
